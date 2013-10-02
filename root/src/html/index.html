@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+    <head>
+        <meta charset="utf-8">
+        <title>{%= name %}</title>
+        <link rel="stylesheet" href="css/app.css"/>
+        <script src="dist/app.js"></script>
+        <script src="dist/vendor.js"></script>
+    </head>
+    <body>
+        <div>{%= name %}</div>
+        <div ng-controller="demoControllerRoot">
+            <ul>
+                <li ng-repeat = "(key,val) in rows">List item {{key}}</li>
+            </ul>
+        </div>
+        <div ng-view></div>
+    </body>
+</html>
