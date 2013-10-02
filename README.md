@@ -3,9 +3,13 @@
 A grunt-init scaffold for Angular Applications.
 
 __Currently, linking is manual.  I plan to provide a Bower/JamJS wrapper within the grunt tooling that will automatically keep the linker up-to-date!__
+
 __Currently, no doc-gen provided out-of-the-box.  Docular coming soon!__
+
 __Currently, no e2e testing provided out-of-the-box.  Protractor coming soon!__
+
 __Currently, no directive testing provided out-of-the-box.  Coming soon!__
+
 
 ### Why use this scaffold?
 
