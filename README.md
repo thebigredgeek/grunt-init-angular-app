@@ -13,7 +13,7 @@ __Currently, no directive testing provided out-of-the-box.  Coming soon!__
 
 ### Why use this scaffold?
 
-If you are like me, you like to have a complete understanding, as well as complete control over, your build process.
+If you are like me, you like to have a complete understanding of, as well as complete control over, your build processes.
 Other alternatives, like `yeoman`, provide a very generic and, in my opinion, bloated solution to managing and building angular applications.
 This scaffold is intended to be a highly modular, yet minimalistic, build scaffold that allows angular developers to
 fully control every facet of the build process using traditional methods like post-compile linking.
