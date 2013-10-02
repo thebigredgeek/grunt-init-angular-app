@@ -46,7 +46,9 @@ It also provides code coverage and maintainability analytics out of the box with
 as well as JSDocs documentation.
 
 To view coverage report:     `http://127.0.0.1:8080/coverage/`
+
 To view complexity report:   `http://127.0.0.1:8080/complexity/`
+
 To view your app:            `http://127.0.0.1:8080/`
 
 
