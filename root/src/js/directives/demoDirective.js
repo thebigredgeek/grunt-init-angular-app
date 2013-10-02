@@ -1,3 +1,11 @@
+/**
+ * @ngdoc directive
+ * @name {%= sterileName %}.directive:demoDirective
+ * @element ELEMENT
+ * @description Just a basic transclusion directive!
+ * @example
+ * <demo-directive>Hello World!</demo-directive>
+ */
 angular.module("{%= sterileName %}")
     .directive('demoDirective',[
         function(){
@@ -5,7 +13,7 @@ angular.module("{%= sterileName %}")
 
             definition.restrict = "E";
             definition.transclude = true;
-            definition.templateUrl = "html/directives/demoDirective.html";
+            definition.templateUrl = "directives/demoDirective.html";
             definition.link = function(scope,element,attr){};
 
             return definition;

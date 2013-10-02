@@ -24,8 +24,9 @@ exports.template = function(grunt, init, done){
         props.sterileName = props.name.replace(/\W/g, '');
 
         props.devDependencies = {
+            "express":"~3.4.0",
             "grunt-plato": "~0.2.1",
-            "grunt-jsdoc": "~0.4.0",
+            "grunt-docular": "latest",
             "grunt-angular-templates":"~0.4.1",
             "grunt-contrib-cssmin":"~0.6.2",
             "grunt-contrib-watch": "~0.5.3",
@@ -37,9 +38,9 @@ exports.template = function(grunt, init, done){
             "grunt-strip": "~0.2.1",
             "grunt-contrib-uglify": "~0.2.4",
             "grunt": "~0.4.1",
+            "grunt-express-server":" ~0.4.3",
             "grunt-contrib-connect": "~0.5.0",
             "karma-coverage": "~0.1.0",
-            "karma-ng-scenario": "~0.1",
             "grunt-contrib-concat": "~0.3.0",
             "grunt-bump": "0.0.11"
         };

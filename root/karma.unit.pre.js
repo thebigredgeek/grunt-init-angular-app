@@ -15,9 +15,9 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             'vendor/managed/angular/angular.js',
-            'vendor/managed/angular-bootstrap/ui-bootstrap-tpls.js',
             'vendor/managed/angular-mocks/angular-mocks.js',
-            'src/js/**/*.js',
+            'src/js/**/{%=sterileName%}.js',
+            'src/js/**/!({%=sterileName%}).js',
             'test/unit/**/*.spec.js'
         ],
 
@@ -57,7 +57,7 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
 
 
         // If browser does not capture in given timeout [ms], kill it

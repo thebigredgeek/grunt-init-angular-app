@@ -1,6 +1,10 @@
 module.exports = function(grunt){
     var pkg = require('./package.json'), //package file
-        i; //iterative member
+        i, //iterative member
+        jslink = require(__dirname+'/linker/js.json').link,
+        csslink = require(__dirname+"/linker/css.json").link;
+
+    csslink.push("src/css/**/*.css");
 
     grunt.initConfig({
         "pkg": grunt.file.readJSON('package.json'),
@@ -29,28 +33,18 @@ module.exports = function(grunt){
             "unit-post":{
                 "configFile": "karma.unit.post.js",
                 "autowatch": false
-            },
-            "e2e":{
-                "configFile": "karma.e2e.js",
-                "autowatch": false
             }
         },
-        "connect":{
+        "express":{
             "server":{
                 "options":{
-                    "port": 9001,
-                    "base":[
-                        "docs",
-                        "analytics"
-                    ],
-                    "keepalive":true,
-                    "livereload":true
+                    "script":"server.js"
                 }
             }
         },
         "concurrent":{
             "environment":{
-                "tasks":["watch","connect"],
+                "tasks":["watch","express"],
                 "options":{
                     "logConcurrentOutput":true
                 }
@@ -69,13 +63,24 @@ module.exports = function(grunt){
                 }
             }
         },
+        "cssmin":{
+            "options":{
+                "banner": "/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today('dd/mm/yyyy') %> */",
+                "report":"gzip"
+            },
+            "dist":{
+                "files":{
+                    "dist/app.css":csslink
+                }
+            }
+        },
         "plato":{
             "report":{
                 "options":{
                     "jshint":false
                 },
                 "files":{
-                    "analytics/plato":["src/js/**/*.js"]
+                    "analytics/complexity":["src/js/**/*.js"]
                 }
             }
         },
@@ -95,8 +100,8 @@ module.exports = function(grunt){
         "watch":{
             "files":[
                 "README.md",
-                "src/**/*.js",
-                "test/**/*.js"
+                "src/**/*.*",
+                "test/**/*.spec.js"
             ],
             "tasks":["test"],
             "options":{
@@ -113,17 +118,26 @@ module.exports = function(grunt){
             },
             "app":{
                 "src":[
-                    "src/js/app.js",
-                    "src/js/**/!(app).js"
+                    "src/js/{%= sterileName %}.js",
+                    "src/js/**/!({%= sterileName %}).js"
                 ],
                 "dest":"process/app.js"
             },
             "vendor":{
-                "src":[
-                    "vendor/managed/angular/angular.min.js",
-                    "vendor/managed/angular-bootstrap/ui-bootstrap-tpls.min.js"
-                ],
+                "src": jslink,
                 "dest":"dist/vendor.js"
+            }
+        },
+        "ngtemplates":{
+            "{%= sterileName %}":{
+                "cwd": "src/html/",
+                "src": ["**/*.html"],
+                "dest": "process/templates.js",
+                "options":{
+                    "htmlmin":{
+                        "collapseWhitespace":true
+                    }
+                }
             }
         },
         "uglify":{
@@ -150,34 +164,52 @@ module.exports = function(grunt){
             "app":{
                 "options":{
                     "sourceMap":"dist/app.map",
+                    "sourceMappingURL":"app.map",
                     "report":"gzip",
                     "banner": "/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today('yyyy-mm-dd') %> */"
                 },
                 "files":{
                     "dist/app.js":[
-                        "process/app.js"
+                        "process/app.js",
+                        "process/templates.js"
                     ]
                 }
             }
         },
-        "jsdoc":{
-            "dist":{
-                "src": [
-                    "README.md",
-                    "src/js/**/*.js"
-                ],
-                "options":{
-                    "destination": "docs"
+        /*
+        "docular":{
+            "baseUrl":"http://127.0.0.1:9001/docs/",
+            "docAPIOrder":["{%=name%}"],
+            "docular_webapp_target":"docs",
+            "groups":[
+                {
+                    "groupTitle":"{%=name%}",
+                    "groupId":"{%=sterileName%}",
+                    "sections":[
+                        {
+                            "id":"{%=sterileName%}",
+                            "title": "{%=name%}",
+                            "scripts":[
+                                "src/js/"
+                            ],
+                            "docs":[
+                                "README.md"
+                            ]
+                        }
+                    ]
                 }
-            }
-        },
+            ]
+        },*/
         "copy":{
             "maps":{
                 "files":[
                     {
                         "expand":true,
                         "flatten": true,
-                        "src":["vendor/managed/**/*.map"],
+                        "src":[
+                            "src/html/index.html",
+                            "vendor/managed/**/*.map"
+                        ],
                         "dest":"dist/",
                         "filter":"isFile"
                     }
@@ -194,7 +226,8 @@ module.exports = function(grunt){
         }
     }
     grunt.registerTask('default',["concurrent"]);
-    grunt.registerTask('test',['jshint','karma:unit-pre','plato','jsdoc']);
-    grunt.registerTask('dist',['clean:dist','jshint','karma:unit-pre','concat','strip','uglify:app',"copy:maps",'karma:unit-post','karma:e2e','jsdoc','bump']);
-    grunt.registerTask('build',['clean:dist','jshint','karma:unit-pre','concat','strip','uglify:app',"copy:maps",'karma:unit-post','karma:e2e','jsdoc']);
+
+    grunt.registerTask('test',[ 'clean:dist','jshint','karma:unit-pre','concat','strip','ngtemplates','uglify:app','cssmin',"copy:maps",                  'plato']);
+    grunt.registerTask('build',['clean:dist','jshint','karma:unit-pre','concat','strip','ngtemplates','uglify:app','cssmin',"copy:maps",'karma:unit-post','plato']);
+    grunt.registerTask('dist',[ 'clean:dist','jshint','karma:unit-pre','concat','strip','ngtemplates','uglify:app','cssmin',"copy:maps",'karma:unit-post','plato','bump']);
 };

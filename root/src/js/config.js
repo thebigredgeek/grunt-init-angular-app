@@ -5,7 +5,7 @@ angular.module("{%= sterileName %}")
             $routeProvider
                 .when("/",{
                     templateUrl:"partials/demoPartial.html",
-                    controller:"demo"
+                    controller:"demoController"
                 })
                 .otherwise({
                     redirectTo:"/"
