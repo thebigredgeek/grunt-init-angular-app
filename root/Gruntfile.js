@@ -113,8 +113,8 @@ module.exports = function(grunt){
             },
             "app":{
                 "src":[
-                    "src/js/{%= sterileName %}.js",
-                    "src/js/**/!({%= sterileName %}).js"
+                    "src/js/app.js",
+                    "src/js/**/!(app).js"
                 ],
                 "dest":"process/app.js"
             },
